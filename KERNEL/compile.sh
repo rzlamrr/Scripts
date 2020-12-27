@@ -34,7 +34,7 @@ function param() {
                 shift
                 export GCC32_DIR=${1} ;;
 
-            "-ci"
+            "-ci")
                 shift
                 export CI=${1} ;;
 
@@ -46,9 +46,11 @@ function param() {
     done
 
     if [[ "$CI" == "drone" ]]; then
-        echoe "Yeay running in drone ci!"
+        echo "Yeay running in drone ci!"
         export HOME=/drone/src
-    if [[ -z "${KBUILD_BUILD_USER}" || -z "${KBUILD_BUILD_HOST} " ]]; then
+    fi
+
+    if [[ -z "${KBUILD_BUILD_USER}" || -z "${KBUILD_BUILD_HOST}" ]]; then
         export KBUILD_BUILD_USER=rzlamrr
         export KBUILD_BUILD_HOST=dvstLab
     fi
@@ -71,7 +73,7 @@ function param() {
     else
         export PATH="${GCC_DIR}/bin:${GCC32_DIR}/bin:${PATH}"
     fi
-    echo $PATH
+    echo "$PATH"
 
     KERNEL_DIR="${PWD}"
     DTB_TYPE="" # define as "single" if want use single file
@@ -112,6 +114,7 @@ export TELEGRAM_FOLDER="${HOME}"/telegram
 if ! [ -d "${TELEGRAM_FOLDER}" ]; then
     echo Wget telegram.sh
     wget -q https://github.com/fabianonline/telegram.sh/raw/master/telegram -P "${TELEGRAM_FOLDER}"
+    chmod +x "${TELEGRAM_FOLDER}"/telegram
 fi
 export TELEGRAM="${TELEGRAM_FOLDER}"/telegram
 
@@ -137,7 +140,6 @@ regenerate() {
 
 # Building
 makekernel() {
-    export PATH="${COMP_PATH}"
     rm -rf "${KERNEL_DIR}"/out/arch/arm64/boot # clean previous compilation
     mkdir -p out
     make O=out ARCH=arm64 ${DEFCONFIG}
@@ -175,7 +177,7 @@ packingkernel() {
     java -jar zipsigner-3.0.jar "${TEMPZIPNAME}" "${ZIPNAME}"
 
     # Ship it to the CI channel
-    tg_log $ZIPNAME "Tes woi"
+    tg_log "$ZIPNAME" "Tes woi"
 }
 
 # clone clang if not exist
