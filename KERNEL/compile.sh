@@ -95,11 +95,11 @@ function param() {
     # Costumize
     KERNEL="SiLonT"
     DEVICE="Ginkgo"
-    #KERNELTYPE="igneel"
-    KERNELNAME="${KERNEL}-${DEVICE}-$(date +%y%m%d-%H%M)"
+    KERNELTYPE="Arjasa"
+    KERNELNAME="${KERNEL}-${DEVICE}-${KERNELTPE}-$(date +%y%m%d-%H%M)"
     TEMPZIPNAME="${KERNELNAME}-unsigned.zip"
     ZIPNAME="${KERNELNAME}.zip"
-    KERNELSYNC=${KERNEL}-${KERNELTYPE}
+    KERNELSYNC=-${KERNEL}-${KERNELTYPE}
 
     # Sync name
     sed -i "50s/.*/CONFIG_LOCALVERSION=\"-${KERNELSYNC}\"/g" arch/arm64/configs/${DEFCONFIG}
