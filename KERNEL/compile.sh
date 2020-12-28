@@ -196,7 +196,7 @@ tg_cast "<b>STARTING KERNEL BUILD</b>" \
     "Compiler: <code>${COMPILER_STRING}</code>" \
 	"Kernel: <code>${KERNEL}-${DEVICE}-${KERNELTYPE}</code>" \
 	"Version: <code>$(make kernelversion)</code>" \
-	"Commit: $(git log --pretty=format:"\`%s\`" -1)"
+	"Commit: $(git log --pretty=format:"%s" -1)"
 START=$(date +"%s")
 makekernel | tee mklog.txt
 # Check If compilation is success
