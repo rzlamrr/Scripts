@@ -4,6 +4,7 @@
 # Copyright (C) 2020 rzlamrr.
 # All rights reserved.
 
+clear
 # Parse the provided parameters
 function param() {
     while [[ $# -ge 1 ]]; do
@@ -193,7 +194,6 @@ fi
 # Starting
 tg_cast "<b>STARTING KERNEL BUILD</b>" \
     "Compiler: <code>${COMPILER_STRING}</code>" \
-	"Device: ${DEVICE}" \
 	"Kernel: <code>${KERNEL}-${DEVICE}-${KERNELTYPE}</code>" \
 	"Version: <code>$(make kernelversion)</code>"
 START=$(date +"%s")
