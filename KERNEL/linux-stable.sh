@@ -255,7 +255,7 @@ Resolve conflicts then run git commit!"
     esac
 }
 
-
+git pull
 parse_parameters "$@"
 update_remote
 generate_versions
