@@ -75,6 +75,7 @@ function param() {
     fi
     echo "$PATH"
 
+    COMPILER_STRING=$(basename $CLANG_URL)
     KERNEL_DIR="${PWD}"
     DTB_TYPE="" # define as "single" if want use single file
     KERN_IMG="${KERNEL_DIR}"/out/arch/arm64/boot/Image.gz-dtb             # if use single file define as Image.gz-dtb instead
@@ -96,7 +97,7 @@ function param() {
     KERNEL="SiLonT"
     DEVICE="Ginkgo"
     KERNELTYPE="Arjasa"
-    KERNELNAME="${KERNEL}-${DEVICE}-${KERNELTPE}-$(date +%y%m%d-%H%M)"
+    KERNELNAME="${KERNEL}-${DEVICE}-${KERNELTYPE}-$(date +%y%m%d-%H%M)"
     TEMPZIPNAME="${KERNELNAME}-unsigned.zip"
     ZIPNAME="${KERNELNAME}.zip"
     KERNELSYNC=-${KERNEL}-${KERNELTYPE}
@@ -134,6 +135,8 @@ tg_log() {
 # Regenerating Defconfig
 regenerate() {
     cp out/.config arch/arm64/configs/"${DEFCONFIG}"
+    git config rzlamrr
+    git config rizal82rebel@gmail.com
     git add arch/arm64/configs/"${DEFCONFIG}"
     git commit -m "defconfig: Regenerate"
     git push ${OIRIGN}
@@ -144,7 +147,7 @@ makekernel() {
     rm -rf "${KERNEL_DIR}"/out/arch/arm64/boot # clean previous compilation
     mkdir -p out
     make O=out ARCH=arm64 ${DEFCONFIG}
-    if [[ "${REGENERATE_DEFCONFIG}" =~ "true" ]]; then
+    if [[ "${REGENERATE_DEFCONFIG}" == "true" ]]; then
         regenerate
     fi
     if [[ "${COMP_TYPE}" == "clang" ]]; then
@@ -162,7 +165,7 @@ packingkernel() {
     fi
     echo Cloning anykernel
     git clone -qq "$ANYKERNEL_REPO" -b "$ANYKERNEL_BRANCH" "${ANYKERNEL}"
-    if [[ "${DTB_TYPE}" =~ "single" ]]; then
+    if [[ "${DTB_TYPE}" == "single" ]]; then
         cp "${KERN_IMG}" "${ANYKERNEL}"/Image.gz-dtb
     else
         cp "${KERN_IMG}" "${ANYKERNEL}"/Image.gz-dtb
@@ -178,7 +181,9 @@ packingkernel() {
     java -jar zipsigner-3.0.jar "${TEMPZIPNAME}" "${ZIPNAME}"
 
     # Ship it to the CI channel
-    tg_log "$ZIPNAME" "Tes woi"
+    END=$(date +"%s")
+    DIFF=$(( END - START ))
+    tg_log "$ZIPNAME" "${DEVICE} with ${COMPILER_STRING} <b>succeed</b> took $((DIFF / 60))m, $((DIFF % 60))s! @fakhiralkda"
 }
 
 # clone clang if not exist
@@ -187,10 +192,10 @@ if ! [ -d "${CLANG_DIR}" ]; then
 fi
 # Starting
 tg_cast "<b>STARTING KERNEL BUILD</b>" \
-    "Compiler: <code>${COMP_TYPE}</code>" \
+    "Compiler: <code>${COMPILER_STRING}</code>" \
 	"Device: ${DEVICE}" \
-	"Kernel: <code>${KERNEL}, ${KERNELTYPE}</code>" \
-	"Linux Version: <code>$(make kernelversion)</code>"
+	"Kernel: <code>${KERNEL}-${DEVICE}-${KERNELTYPE}</code>" \
+	"Version: <code>$(make kernelversion)</code>"
 START=$(date +"%s")
 makekernel | tee mklog.txt
 # Check If compilation is success
@@ -204,6 +209,3 @@ if ! [ -f "${KERN_IMG}" ]; then
 	exit 1
 fi
 packingkernel
-END=$(date +"%s")
-DIFF=$(( END - START ))
-tg_cast "${DEVICE} with ${COMPILER_STRING} <b>succeed</b> took $((DIFF / 60))m, $((DIFF % 60))s! @fakhiralkda"
