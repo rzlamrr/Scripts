@@ -136,6 +136,7 @@ regenerate() {
     cp out/.config arch/arm64/configs/"${DEFCONFIG}"
     git add arch/arm64/configs/"${DEFCONFIG}"
     git commit -m "defconfig: Regenerate"
+    git push ${OIRIGN}
 }
 
 # Building
