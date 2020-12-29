@@ -136,8 +136,8 @@ tg_log() {
 # Regenerating Defconfig
 regenerate() {
     cp out/.config arch/arm64/configs/"${DEFCONFIG}"
-    git config rzlamrr
-    git config rizal82rebel@gmail.com
+    git config user.name rzlamrr
+    git config user.email rizal82rebel@gmail.com
     git add arch/arm64/configs/"${DEFCONFIG}"
     git commit -m "defconfig: Regenerate"
     git push ${OIRIGN}
@@ -198,15 +198,13 @@ tg_cast "<b>STARTING KERNEL BUILD</b>" \
 	"Version: <code>$(make kernelversion)</code>" \
 	"Commit: $(git log --pretty=format:"%s" -1)"
 START=$(date +"%s")
-makekernel | tee mklog.txt
+makekernel 2>&1| tee mklog.txt
 # Check If compilation is success
 if ! [ -f "${KERN_IMG}" ]; then
 	END=$(date +"%s")
 	DIFF=$(( END - START ))
 	echo -e "Kernel compilation failed, See buildlog to fix errors"
-    grep -iE 'crash|error|failed|fatal|fail' mklog.txt > trimmedlog.txt
-	tg_log "trimmedlog.txt" "${DEVICE} <b>failed</b> in $((DIFF / 60))m, $((DIFF % 60))s! @fakhiralkda"
-    tg_log "mklog.txt" "Full log!"
+	tg_log "mklog.txt" "${DEVICE} <b>failed</b> in $((DIFF / 60))m, $((DIFF % 60))s! @fakhiralkda"
 	exit 1
 fi
 packingkernel
