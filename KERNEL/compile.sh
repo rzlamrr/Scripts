@@ -101,7 +101,7 @@ function param() {
     KERNELNAME="${KERNEL}-${DEVICE}-${KERNELTYPE}-$(date +%y%m%d-%H%M)"
     TEMPZIPNAME="${KERNELNAME}-unsigned.zip"
     ZIPNAME="${KERNELNAME}.zip"
-    KERNELSYNC=-${KERNEL}-${KERNELTYPE}
+    KERNELSYNC=${KERNEL}-${KERNELTYPE}
 
     # Sync name
     sed -i "50s/.*/CONFIG_LOCALVERSION=\"-${KERNELSYNC}\"/g" arch/arm64/configs/${DEFCONFIG}
@@ -152,7 +152,19 @@ makekernel() {
         regenerate
     fi
     if [[ "${COMP_TYPE}" == "clang" ]]; then
-        make -j$(nproc --all) CC=clang CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi- O=out ARCH=arm64
+        make -j$(nproc --all) O=out \
+                                ARCH=arm64 \
+                                LD=ld.lld \
+                                CC=clang \
+                                AS=llvm-as \
+                                AR=llvm-ar \
+                                NM=llvm-nm \
+                                OBJCOPY=llvm-objcopy \
+                                OBJDUMP=llvm-objdump \
+                                STRIP=llvm-strip \
+                                CROSS_COMPILE=aarch64-linux-gnu- \
+                                CROSS_COMPILE_ARM32=arm-linux-gnueabi- \
+                                Image.gz-dtb dtbo.img
     else
 	    make -j$(nproc --all) O=out ARCH=arm64 CROSS_COMPILE="${GCC_DIR}/bin/aarch64-elf-" CROSS_COMPILE_ARM32="${GCC32_DIR}/bin/arm-eabi-"
     fi
@@ -205,6 +217,6 @@ if ! [ -f "${KERN_IMG}" ]; then
 	DIFF=$(( END - START ))
 	echo -e "Kernel compilation failed, See buildlog to fix errors"
 	tg_log "mklog.txt" "${DEVICE} <b>failed</b> in $((DIFF / 60))m, $((DIFF % 60))s! @fakhiralkda"
-	exit 1
+	#exit 1
 fi
 packingkernel
