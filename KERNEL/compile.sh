@@ -201,6 +201,7 @@ packingkernel() {
 
 # clone clang if not exist
 if ! [ -d "${CLANG_DIR}" ]; then
+    echo "Cloning clang!"
     git clone -qq "$CLANG_URL" --depth=1 "$CLANG_DIR"
 fi
 # Starting
@@ -208,7 +209,7 @@ tg_cast "<b>STARTING KERNEL BUILD</b>" \
     "Compiler: <code>${COMPILER_STRING}</code>" \
 	"Kernel: <code>${KERNEL}-${DEVICE}-${KERNELTYPE}</code>" \
 	"Version: <code>$(make kernelversion)</code>" \
-	"Commit: $(git log --pretty=format:"%s" -1)"
+	"Commit: <code>$(git log --pretty=format:"%s" -1)</code>"
 START=$(date +"%s")
 makekernel 2>&1| tee mklog.txt
 # Check If compilation is success
@@ -220,3 +221,4 @@ if ! [ -f "${KERN_IMG}" ]; then
 	#exit 1
 fi
 packingkernel
+tg_log "mklog.txt" "Full log!"
