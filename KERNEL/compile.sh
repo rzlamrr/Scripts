@@ -51,8 +51,10 @@ function param() {
         export HOME=/drone/src
     fi
 
-    if [[ -z "${KBUILD_BUILD_USER}" || -z "${KBUILD_BUILD_HOST}" ]]; then
+    if [[ -z "${KBUILD_BUILD_USER}" ]]; then
         export KBUILD_BUILD_USER=rzlamrr
+    fi
+    if [[ -z "${KBUILD_BUILD_HOST}" ]]; then
         export KBUILD_BUILD_HOST=dvstLab
     fi
 
@@ -178,10 +180,8 @@ packingkernel() {
     fi
     echo Cloning anykernel
     git clone -qq "$ANYKERNEL_REPO" -b "$ANYKERNEL_BRANCH" "${ANYKERNEL}"
-    if [[ "${DTB_TYPE}" == "single" ]]; then
-        cp "${KERN_IMG}" "${ANYKERNEL}"/Image.gz-dtb
-    else
-        cp "${KERN_IMG}" "${ANYKERNEL}"/Image.gz-dtb
+    cp "${KERN_IMG}" "${ANYKERNEL}"/Image.gz-dtb
+    if [[ -z "${DTB_TYPE}" ]]; then
         cp "${KERN_DTB}" "${ANYKERNEL}"/dtbo.img
     fi
 
