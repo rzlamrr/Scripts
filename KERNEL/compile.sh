@@ -98,7 +98,7 @@ function param() {
 
     # Defconfig
     DEFCONFIG="silont-perf_defconfig"
-    if [[ "$REGEN" == "true"]]; then
+    if [[ "$REGEN" == "true" ]]; then
         REGENERATE_DEFCONFIG="true" # unset if don't want to regenerate defconfig
     fi
 
