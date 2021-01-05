@@ -41,7 +41,7 @@ function param() {
 
             "-r"|"-regen")
                 shift
-                REGEN=${1}
+                REGEN=${1} ;;
 
             *)
                 echo "Invalid parameter!" ;;
