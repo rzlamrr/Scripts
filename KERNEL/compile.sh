@@ -39,6 +39,10 @@ function param() {
                 shift
                 export CI=${1} ;;
 
+            "-r"|"-regen")
+                shift
+                REGEN=${1}
+
             *)
                 echo "Invalid parameter!" ;;
         esac
@@ -94,7 +98,9 @@ function param() {
 
     # Defconfig
     DEFCONFIG="silont-perf_defconfig"
-    REGENERATE_DEFCONFIG="true" # unset if don't want to regenerate defconfig
+    if [[ "$REGEN" == "true"]]; then
+        REGENERATE_DEFCONFIG="true" # unset if don't want to regenerate defconfig
+    fi
 
     # Costumize
     KERNEL="SiLonT"
