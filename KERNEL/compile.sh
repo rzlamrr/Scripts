@@ -223,6 +223,6 @@ if ! [ -f "${KERN_IMG}" ]; then
 	DIFF=$(( END - START ))
 	echo -e "Kernel compilation failed, See buildlog to fix errors"
 	tg_log "mklog.txt" "${DEVICE} <b>failed</b> in $((DIFF / 60))m, $((DIFF % 60))s! @fakhiralkda"
-	#exit 1
+	exit 1
 fi
 packingkernel
