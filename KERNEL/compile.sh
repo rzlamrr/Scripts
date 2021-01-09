@@ -225,4 +225,5 @@ if ! [ -f "${KERN_IMG}" ]; then
 	tg_log "mklog.txt" "${DEVICE} <b>failed</b> in $((DIFF / 60))m, $((DIFF % 60))s! @fakhiralkda"
 	exit 1
 fi
+tg_log "mklog.txt"
 packingkernel
