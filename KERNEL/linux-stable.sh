@@ -73,6 +73,13 @@ function warn() {
     [[ -z ${2} ]] && echo
 }
 
+function merge() {
+    git merge -S --signoff "$@"
+}
+
+function cherry-pick() }
+    git cherry-pick -S --signoff "$@"
+}
 
 # Parse the provided parameters
 function parse_parameters() {
