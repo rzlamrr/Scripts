@@ -5,6 +5,7 @@
 
 # defconfig id chat_id bot_token
 
+export TZ=Asia/Jakarta
 AKN=${HOME}/anykernel
 git clone --quiet --depth=1 https://github.com/rzlamrr/anykernel3 -b rova ${AKN}
 export ARCH=arm64 && export SUBARCH=arm64
@@ -19,23 +20,27 @@ if [[ msm_test != 1 ]]; then # Yep, clone gcc32 for vDSO32 :(
     export CROSS_COMPILE_ARM32=arm-eabi-
     export PATH=$(pwd)/gcc32/bin:${PATH}
 fi
+START=$(date +"%s")
 make -j$(nproc) ARCH=arm64 O=out ${DEFCONFIG}
-make -j$(nproc) ARCH=arm64 O=out &> build.log
+make -j$(nproc) ARCH=arm64 O=out 2>&1| tee build.log
 if [[ ! -f $(pwd)/out/arch/arm64/boot/Image.gz-dtb ]] ; then
     curl -F document=@$(pwd)/build.log "https://api.telegram.org/bot${token}/sendDocument" -F chat_id=${my_id}
     curl -s -X POST "https://api.telegram.org/bot${token}/sendMessage" -d chat_id=${my_id} -d text="Build failed! at branch $(git rev-parse --abbrev-ref HEAD)"
   exit 1 ;
 fi
+END=$(date +"%s")
+DIFF=$(( END - START ))
 curl -F document=@$(pwd)/build.log "https://api.telegram.org/bot${token}/sendDocument" -F chat_id=${my_id}
 mv $(pwd)/out/arch/arm64/boot/Image.gz-dtb ${AKN}
-NAME=Axylon-rova-"$(TZ=Asia/Jakarta date +'%d%m%y')"
+NAME=Axylon-rova-"$(date +'%d%m%y')"
 TEMPZIP=${NAME}-unsigned.zip
 ZIP=${NAME}.zip
 cd ${AKN} && zip -r9q "${TEMPZIP}" *
 curl -sLo zipsigner-3.0.jar https://raw.githubusercontent.com/baalajimaestro/AnyKernel2/master/zipsigner-3.0.jar
 java -jar zipsigner-3.0.jar "${TEMPZIP}" "${ZIP}"
 curl -F "disable_web_page_preview=true" -F "parse_mode=html" -F document=@$(echo "${ZIP}") "https://api.telegram.org/bot${token}/sendDocument" -F caption="""
-New test-build #riva #rolex #rova
-Linux $(cat $(pwd)/out/.config | grep Linux/arm64 | cut -d " " -f3)
-Commit <code>${cmsg}</code>
-<b>MD5:</b> <code>$(md5sum ${ZIP} | cut -d " " -f 1)</code>." -F chat_id=${channel_id}
+#riva #rolex #rova
+New <b>Axylon-rova Linux v$(cd ../axylon && cat $(pwd)/out/.config | grep Linux/arm64 | cut -d " " -f3)</b>
+<i>Commit</i>: <code>${cmsg}</code>
+<i>MD5:</i> <code>$(md5sum ${ZIP} | cut -d " " -f 1)</code>
+<b>succeed</b> took $((DIFF / 60))m, $((DIFF % 60))s!" -F chat_id=${channel_id}
