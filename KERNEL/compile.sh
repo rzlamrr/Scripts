@@ -43,6 +43,10 @@ function param() {
                 shift
                 REGEN=${1} ;;
 
+            "-d"|"-defconfig")
+                shift
+                DEFCONFIG=${1} ;;
+
             *)
                 echo "Invalid parameter!" ;;
         esac
@@ -97,7 +101,7 @@ function param() {
     fi
 
     # Defconfig
-    DEFCONFIG="silont-perf_defconfig"
+    # DEFCONFIG="silont-perf_defconfig"
     if [[ "$REGEN" == "true" ]]; then
         REGENERATE_DEFCONFIG="true" # unset if don't want to regenerate defconfig
     fi
