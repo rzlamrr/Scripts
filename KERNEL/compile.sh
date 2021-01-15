@@ -47,6 +47,10 @@ function param() {
                 shift
                 DEFCONFIG=${1} ;;
 
+            "-cn"|"-codename")
+                shift
+                CODENAME=${1} ;;
+
             *)
                 echo "Invalid parameter!" ;;
         esac
@@ -109,7 +113,7 @@ function param() {
     # Costumize
     KERNEL="SiLonT"
     DEVICE="Ginkgo"
-    KERNELTYPE="Arjasa"
+    KERNELTYPE="${CODENAME}"
     KERNELNAME="${KERNEL}-${DEVICE}-${KERNELTYPE}-$(date +%y%m%d-%H%M)"
     TEMPZIPNAME="${KERNELNAME}-unsigned.zip"
     ZIPNAME="${KERNELNAME}.zip"
