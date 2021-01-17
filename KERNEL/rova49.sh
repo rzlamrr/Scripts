@@ -31,8 +31,9 @@ fi
 END=$(date +"%s")
 DIFF=$(( END - START ))
 curl -F document=@$(pwd)/build.log "https://api.telegram.org/bot${token}/sendDocument" -F chat_id=${my_id}
+LINUXV="v$(cd ../axylon && cat $(pwd)/out/.config | grep Linux/arm64 | cut -d " " -f3)"
 mv $(pwd)/out/arch/arm64/boot/Image.gz-dtb ${AKN}
-NAME=Axylon-rova-"$(date +'%d%m%y')"
+NAME=Axylon-rova-x49-"$(date +'%d%m%y')"
 TEMPZIP=${NAME}-unsigned.zip
 ZIP=${NAME}.zip
 cd ${AKN} && zip -r9q "${TEMPZIP}" *
@@ -40,7 +41,7 @@ curl -sLo zipsigner-3.0.jar https://raw.githubusercontent.com/baalajimaestro/Any
 java -jar zipsigner-3.0.jar "${TEMPZIP}" "${ZIP}"
 curl -F "disable_web_page_preview=true" -F "parse_mode=html" -F document=@$(echo "${ZIP}") "https://api.telegram.org/bot${token}/sendDocument" -F caption="""
 #riva #rolex #rova
-New <b>Axylon-rova Linux v$(cd ../axylon && cat $(pwd)/out/.config | grep Linux/arm64 | cut -d " " -f3)</b>
+New <b>Axylon-rova Linux "${LINUXV}"</b>
 <i>Commit</i>: <code>${cmsg}</code>
 <i>MD5:</i> <code>$(md5sum ${ZIP} | cut -d " " -f 1)</code>
 <b>succeed</b> took $((DIFF / 60))m, $((DIFF % 60))s!" -F chat_id=${channel_id}

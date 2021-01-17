@@ -114,7 +114,8 @@ function param() {
     KERNEL="SiLonT"
     DEVICE="Ginkgo"
     KERNELTYPE="${CODENAME}"
-    KERNELNAME="${KERNEL}-${DEVICE}-${KERNELTYPE}-$(date +%y%m%d-%H%M)"
+    KBRANCH="$(git rev-parse --abbrev-ref HEAD)"
+    KERNELNAME="${KERNEL}-${DEVICE}-${KERNELTYPE}-${KBRANCH}-$(date +%y%m%d)"
     TEMPZIPNAME="${KERNELNAME}-unsigned.zip"
     ZIPNAME="${KERNELNAME}.zip"
     KERNELSYNC=${KERNEL}-${KERNELTYPE}
