@@ -194,6 +194,11 @@ packingkernel() {
         rm -rf "${ANYKERNEL}"
     fi
     echo Cloning anykernel
+    if [ "${KBRANCH}" == "x11" ]; then
+        ANYKERNEL_BRANCH=geleven
+    elif [ "${KBRANCH}" == "x10" ]; then
+        ANYKERNEL_BRANCH=gten
+    fi
     git clone -qq "$ANYKERNEL_REPO" -b "$ANYKERNEL_BRANCH" "${ANYKERNEL}"
     cp "${KERN_IMG}" "${ANYKERNEL}"/Image.gz-dtb
     if [[ -z "${DTB_TYPE}" ]]; then
