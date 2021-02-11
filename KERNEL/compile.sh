@@ -90,7 +90,6 @@ function param() {
     fi
     echo "$PATH"
 
-    COMPILER_STRING=$(basename $CLANG_URL)
     KERNEL_DIR="${PWD}"
     DTB_TYPE="" # define as "single" if want use single file
     KERN_IMG="${KERNEL_DIR}"/out/arch/arm64/boot/Image.gz-dtb             # if use single file define as Image.gz-dtb instead
@@ -223,6 +222,7 @@ packingkernel() {
 if ! [ -d "${CLANG_DIR}" ]; then
     git clone -qq "$CLANG_URL" --depth=1 "$CLANG_DIR"
 fi
+COMPILER_STRING="$($CLANG_DIR/bin/clang --version | head -n 1 | perl -pe 's/\((?:http|git).*?\)//gs')"
 # Starting
 tg_cast "<b>STARTING KERNEL BUILD</b>" \
     "Compiler: <code>${COMPILER_STRING}</code>" \
