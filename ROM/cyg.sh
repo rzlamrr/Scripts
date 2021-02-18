@@ -10,7 +10,7 @@ function wkt() {
 }
 
 sink () {
-    repo init repo init -u https://github.com/cygnus-rom/manifest.git -b caf-11
+    repo init -u https://github.com/cygnus-rom/manifest.git -b caf-11
     repo sync -c -j22 --force-sync --no-clone-bundle --no-tags --optimized-fetch
 }
 
