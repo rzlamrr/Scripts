@@ -30,10 +30,10 @@ tg_doc() {
 mkdir cyg && cd cyg
 wkt
 if sink | tee sink-${DATELOG}.txt;then
-    export KOMODO_VARIANT=RELEASE
     export USE_CCACHE=1
     export CCACHE_EXEC=$(command -v ccache)
     ccache -M 50G
+    python3 vendor/cygnus/build/tools/roomservice.py ginkgo
     makan
     if masak | tee masak-${DATELOG}.txt;then
         FILEPATH=${OUT}/${FILE}
