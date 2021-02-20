@@ -78,6 +78,10 @@ function param() {
         echo "Using silont clang!"
         export CLANG_DIR="$HOME/clang/silont"
         export CLANG_URL=https://github.com/silont-project/silont-clang
+    elif [[ "${CLANG_URL}" == "sdclang" ]]; then
+        echo "Using sdclang!"
+        export CLANG_DIR="$HOME/clang/sdllvm"
+        export CLANG_URL=https://github.com/ThankYouMario/proprietary_vendor_qcom_sdclang
     else
         echo -e "Using ${CLANG_URL}"
         export CLANG_DIR="$HOME/kernel/clang"
