@@ -238,6 +238,8 @@ tg_cast "<b>STARTING KERNEL BUILD</b>" \
     "Branch: $(git rev-parse --abbrev-ref HEAD)" \
 	"Commit: <code>$(git log --pretty=format:"%s" -1)</code>"
 START=$(date +"%s")
+export CROSS_COMPILE="aarch64-silont-linux-gnu-"
+export CROSS_COMPILE_ARM32="arm-silont-linux-gnueabi-"
 makekernel 2>&1| tee mklog.txt
 # Check If compilation is success
 if ! [ -f "${KERN_IMG}" ]; then
