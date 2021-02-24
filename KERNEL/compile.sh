@@ -46,6 +46,10 @@ function param() {
             "-d"|"-defconfig")
                 shift
                 DEFCONFIG=${1} ;;
+		
+	    "-k"|"-kramel")
+                shift
+                KRAMEL=${1} ;;
 
             "-cn"|"-codename")
                 shift
@@ -153,7 +157,7 @@ tg_log() {
     "${TELEGRAM}" -t "${TELEGRAM_TOKEN}" -c "${CHATID}" -f "${1}" -H "${2}"
 }
 
-# Regenerating Defconfig
+# Regenerating 
 regenerate() {
     cp out/.config arch/arm64/configs/"${DEFCONFIG}"
     git config user.name rzlamrr
@@ -240,6 +244,13 @@ tg_cast "<b>STARTING KERNEL BUILD</b>" \
 START=$(date +"%s")
 export CROSS_COMPILE="aarch64-silont-linux-gnu-"
 export CROSS_COMPILE_ARM32="arm-silont-linux-gnueabi-"
+if [ "${KRAMEL}" == "qs" ]; then
+cat <<'EOF' >> arch/arm64/configs/vendor/ginkgo-perf_defconfig
+CONFIG_LTO_CLANG=y
+CONFIG_THINLTO=y
+CONFIG_LD_DEAD_CODE_DATA_ELIMINATION=y
+EOF
+fi
 makekernel 2>&1| tee mklog.txt
 # Check If compilation is success
 if ! [ -f "${KERN_IMG}" ]; then
