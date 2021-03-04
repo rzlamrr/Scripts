@@ -186,8 +186,6 @@ makekernel() {
                                 OBJCOPY=llvm-objcopy \
                                 OBJDUMP=llvm-objdump \
                                 STRIP=llvm-strip \
-                                CROSS_COMPILE=aarch64-linux-gnu- \
-                                CROSS_COMPILE_ARM32=arm-linux-gnueabi- \
                                 Image.gz-dtb dtbo.img
     else
 	    make -j$(nproc --all) O=out ARCH=arm64 CROSS_COMPILE="${GCC_DIR}/bin/aarch64-elf-" CROSS_COMPILE_ARM32="${GCC32_DIR}/bin/arm-eabi-"
