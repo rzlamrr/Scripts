@@ -186,6 +186,8 @@ makekernel() {
                                 OBJCOPY=llvm-objcopy \
                                 OBJDUMP=llvm-objdump \
                                 STRIP=llvm-strip \
+			       	  CROSS_COMPILE=aarch64-silont-linux-gnu- \
+                                CROSS_COMPILE_ARM32=arm-silont-linux-gnueabi- \
                                 Image.gz-dtb dtbo.img
     else
 	    make -j$(nproc --all) O=out ARCH=arm64 CROSS_COMPILE="${GCC_DIR}/bin/aarch64-elf-" CROSS_COMPILE_ARM32="${GCC32_DIR}/bin/arm-eabi-"
@@ -225,12 +227,12 @@ packingkernel() {
 }
 
 # clone clang if not exist
-#if ! [ -d "${CLANG_DIR}" ]; then
-#    git clone -qq --depth=1 https://github.com/silont-project/aarch64-silont-linux-gnu "$HOME/gcc"
-#    git clone -qq --depth=1 https://github.com/silont-project/arm-silont-linux-gnueabi "$HOME/gcc32"
-#    export PATH="$HOME/gcc/bin:$HOME/gcc32/bin:${PATH}"
-#    git clone -qq "$CLANG_URL" --depth=1 "$CLANG_DIR"
-#fi
+if ! [ -d "${CLANG_DIR}" ]; then
+    git clone -qq --depth=1 https://github.com/silont-project/aarch64-silont-linux-gnu "$HOME/gcc"
+    git clone -qq --depth=1 https://github.com/silont-project/arm-silont-linux-gnueabi "$HOME/gcc32"
+    export PATH="$HOME/gcc/bin:$HOME/gcc32/bin:${PATH}"
+    git clone -qq "$CLANG_URL" --depth=1 "$CLANG_DIR"
+fi
 COMPILER_STRING="$($CLANG_DIR/bin/clang --version | head -n 1 | perl -pe 's/\((?:http|git).*?\)//gs')"
 # Starting
 tg_cast "<b>STARTING KERNEL BUILD</b>" \
