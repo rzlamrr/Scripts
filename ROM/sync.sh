@@ -24,7 +24,7 @@ erfanoabdi_hals()
 var()
 {
   # Check and prompt if all variables were not filled #
-  if [[ -n "$repo" && -n "$branch" && -n "$depis" && -n "$hals" && -n "$dhal" && -n "$aver"]]; then
+  if [[ -n "$repo" && -n "$branch" && -n "$depis" && -n "$hals" && -n "$dhal" && -n "$aver" ]]; then
     echo "All variables are filled, skipping prompt!"
   else
     read -p "Enter manifest repo link: " a
@@ -39,8 +39,8 @@ var()
           echo "1. trinket-devs"
           echo "2. erfanoabdi"
           read -p "Which hals'?(1/2) " g
-        if
-      if
+        fi
+      fi
     fi
     export repo=$a branch=$b aver=$c manifest=$d depis=$e hals=$f dhal=$g
   fi

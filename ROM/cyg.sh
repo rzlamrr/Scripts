@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-OUT="$pwd/out/target/product/*"
+OUT="$(pwd)/out/target/product/*"
 FILE=$(basename ${OUT}/Cygnus*ginkgo*zip)
 
 export TZ="Asia/Jakarta"
