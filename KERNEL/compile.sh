@@ -228,8 +228,8 @@ packingkernel() {
 
 # clone clang if not exist
 if ! [ -d "${CLANG_DIR}" ]; then
-    git clone -qq --depth=1 https://github.com/silont-project/aarch64-silont-linux-gnu "$HOME/gcc"
-    git clone -qq --depth=1 https://github.com/silont-project/arm-silont-linux-gnueabi "$HOME/gcc32"
+    git clone -qq --depth=1 https://github.com/silont-project/aarch64-silont-linux-gnu "$HOME/gcc" -b arm64/11
+    git clone -qq --depth=1 https://github.com/silont-project/arm-silont-linux-gnueabi "$HOME/gcc32" -b arm/11
     export PATH="$HOME/gcc/bin:$HOME/gcc32/bin:${PATH}"
     git clone -qq "$CLANG_URL" --depth=1 "$CLANG_DIR"
 fi
