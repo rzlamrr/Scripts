@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 if [[ -z "$job" ]]; then
-  export job=$(nproc --all)
+  job=$(nproc --all)
 fi
 
-if [[ -n "$setup" && -n "$lun" && -n "$compile" && -n "$depis" && -n "$rom" ]]; then
+if [[ -n "$setup" && -n "$lun" && -n && -n "$depis" && -n "$rom" ]]; then
   echo tes
 else
   read -p "Wut depis?(codename): " depis
@@ -14,21 +14,21 @@ else
     export type=userdebug
   fi
   echo "Input rom vendor name"
-  read -p "(This will be used for lunch): " rom
+  read -rp "(This will be used for lunch): " rom
   echo "Input setup cmd"
-  read -p "(default, bash build/envsetup.sh): " s
+  read -rp "(default, bash build/envsetup.sh): " s
   echo "Input lunch cmd"
-  read -p "(default, lunch "$rom"_"$depis"-"$type"): " l
+  read -rp "(default, lunch $rom_$depis-$type): " l
   echo "Input compile cmd"
-  read -p "(default, mka $depis -j$job): " c
+  read -rp "(default, mka $depis -j$job): " c
   export setup=$s lun=$l comp=$c depis=$depis type=$type rom=$rom
   if [[ -z "$lun" ]]; then
     if [[ -z "$depis" || -z "$type" ]]; then
       echo "Unknown device and build type!!"
       exit
     else
-      export lun="lunch "$rom"_"$depis"-"$type""
-      echo $lun
+      export lun="lunch $rom_$depis-$type"
+      echo "$lun"
     fi
   elif [[ -z "$s" ]]; then
     export setup="source build/envsetup.sh"

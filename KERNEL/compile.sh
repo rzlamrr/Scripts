@@ -108,7 +108,7 @@ function param() {
     if [[ -z "${ANYKERNEL_REPO}" || -z "${ANYKERNEL_BRANCH}" ]]; then
         echo "Using default anykernel!"
         ANYKERNEL_REPO="https://github.com/rzlamrr/anykernel3"
-        ANYKERNEL_BRANCH="master"
+        ANYKERNEL_BRANCH="geleven"
     fi
 
     # Defconfig

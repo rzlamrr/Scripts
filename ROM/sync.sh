@@ -27,18 +27,18 @@ var()
   if [[ -n "$repo" && -n "$branch" && -n "$depis" && -n "$hals" && -n "$dhal" && -n "$aver" ]]; then
     echo "All variables are filled, skipping prompt!"
   else
-    read -p "Enter manifest repo link: " a
-    read -p "Enter manifest branch: " b
-    read -p "Android version(9/10/11): " c
-    read -p "Input your local manifets link(blank for default): " d
+    read -rp "Enter manifest repo link: " a
+    read -rp "Enter manifest branch: " b
+    read -rp "Android version(9/10/11): " c
+    read -rp "Input your local manifets link(blank for default): " d
     if [[ -z "$manifest" ]];then
-      read -p "Wut depis bro?(codename): " e
+      read -rp "Wut depis bro?(codename): " e
       if [[ "$e" == "ginkgo" ]]; then
-        read -p "Do you want to change hals? Y/N: " f
-        if [[ "$e" = "${hal#[Yy]}" ]];then
+        read -rp "Do you want to change hals? Y/N: " f
+        if [[ "$f" = "${f#[Yy]}" ]];then
           echo "1. trinket-devs"
           echo "2. erfanoabdi"
-          read -p "Which hals'?(1/2) " g
+          read -rp "Which hals'?(1/2) " g
         fi
       fi
     fi
@@ -75,7 +75,7 @@ sync()
   # Some scripts #
   if [[ -n "$manifest" ]];then
     rm -rf .repo/local*
-    wget $manifest -P .repo/local_manifests/
+    wget "$manifest" -P .repo/local_manifests/
   else
     if [[ -z "$depis" ]]; then
       echo "Idk wut depis!!"
