@@ -86,6 +86,10 @@ function param() {
         echo "Using sdclang!"
         export CLANG_DIR="$HOME/clang/sdllvm"
         export CLANG_URL=https://github.com/ThankYouMario/proprietary_vendor_qcom_sdclang
+    elif [[ "${CLANG_URL}" == "azure" ]]; then
+        echo "Using silont clang!"
+        export CLANG_DIR="$HOME/clang/azure"
+        export CLANG_URL=https://github.com/Panchajanya1999/azure-clang
     else
         echo -e "Using ${CLANG_URL}"
         export CLANG_DIR="$HOME/kernel/clang"
@@ -186,8 +190,8 @@ makekernel() {
                                 OBJCOPY=llvm-objcopy \
                                 OBJDUMP=llvm-objdump \
                                 STRIP=llvm-strip \
-			       	CROSS_COMPILE="$HOME/gcc/bin/aarch64-elf-" \
-				CROSS_COMPILE_ARM32="$HOME/gcc32/bin/arm-eabi-" \
+			       	CROSS_COMPILE="aarch64-linux-gnu-" \
+				CROSS_COMPILE_ARM32="arm-linux-gnueabi-" \
                                 Image.gz-dtb dtbo.img
     else
 	    make -j$(nproc --all) O=out ARCH=arm64 CROSS_COMPILE="${GCC_DIR}/bin/aarch64-elf-" CROSS_COMPILE_ARM32="${GCC32_DIR}/bin/arm-eabi-"
