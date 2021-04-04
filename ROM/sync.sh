@@ -69,7 +69,7 @@ sync()
     echo "Nothing repo and/or branch to init" 
     exit
   else
-    repo init --depth=1 -u $repo -b $branch
+    repo init --depth=1 -u "$repo" -b "$branch"
   fi
 
   # Some scripts #
@@ -81,7 +81,7 @@ sync()
       echo "Idk wut depis!!"
       exit
     else
-      wget https://raw.githubusercontent.com/rzlamrr/local_manifests/master/$depis-$aver.xml -P .repo/local_manifests/
+      wget https://raw.githubusercontent.com/rzlamrr/local_manifests/master/"$depis"-"$aver".xml -P .repo/local_manifests/
     fi
   fi
 
@@ -98,9 +98,9 @@ sync()
   fi
 
   # Author #
-  cd device/xiaomi/$depis
+  cd device/xiaomi/"$depis" || exit
   author
-  cd ../../../vendor/xiaomi/$depis
+  cd ../../../vendor/xiaomi/"$depis" || exit
   author
   cd ../../..
   echo "Done!!"
@@ -108,7 +108,7 @@ sync()
 
 tg_doc()
 {
-  curl -F name=document -F document=@$1 -H "Content-Type:multipart/form-data" "https://api.telegram.org/$BOT_TOKEN/sendDocument?chat_id=1095222353"
+  curl -F name=document -F document=@"$1" -H "Content-Type:multipart/form-data" "https://api.telegram.org/$BOT_TOKEN/sendDocument?chat_id=1095222353"
 }
 
 main() {

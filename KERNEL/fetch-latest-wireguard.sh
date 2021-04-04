@@ -30,4 +30,4 @@ git config user.name rzlamrr
 git config user.email rizal82rebel@gmail.com
 git add net/wireguard
 git commit --signoff -m "wireguard: Update to version ${VERSION}"
-git push ${ORIGIN}
+git push "${ORIGIN}"

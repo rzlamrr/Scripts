@@ -132,7 +132,7 @@ function param() {
     KERNELSYNC=${KERNEL}-${KERNELTYPE}
 
     # Sync name
-    sed -i "50s/.*/CONFIG_LOCALVERSION=\"-${KERNELSYNC}\"/g" arch/arm64/configs/${DEFCONFIG}
+    sed -i "50s/.*/CONFIG_LOCALVERSION=\"-${KERNELSYNC}\"/g" arch/arm64/configs/"${DEFCONFIG}"
 }
 
 param "$@"
@@ -168,14 +168,14 @@ regenerate() {
     git config user.email rizal82rebel@gmail.com
     git add arch/arm64/configs/"${DEFCONFIG}"
     git commit -m "defconfig: Regenerate"
-    git push ${OIRIGN}
+    git push "${OIRIGN}"
 }
 
 # Building
 makekernel() {
     rm -rf "${KERNEL_DIR}"/out/arch/arm64/boot # clean previous compilation
     mkdir -p out
-    make O=out ARCH=arm64 ${DEFCONFIG}
+    make O=out ARCH=arm64 "${DEFCONFIG}"
     if [[ "${REGENERATE_DEFCONFIG}" == "true" ]]; then
         regenerate
     fi

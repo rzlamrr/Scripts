@@ -147,8 +147,8 @@ packingkernel() {
 
 # Starting
 "${TELEGRAM}" -t "${TELEGRAM_TOKEN}" -C "${CHATID}" -M "**#$DRONE_BUILD_NUMBER DroneCI Build Triggered**
-**Compiler:** `${CSTRING}`
-**Kernel:** `${KERNEL}-${DEVICE} $(make kernelversion)`
+**Compiler:** $(${CSTRING})
+**Kernel:** $(${KERNEL}-${DEVICE} $(make kernelversion))
 **Commit:** [$(git config --get remote.origin.url)/commit/$(git log -1 --format="%H")](${COMMIT_POINT})"
 
 START=$(date +"%s")

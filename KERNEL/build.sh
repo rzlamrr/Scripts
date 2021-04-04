@@ -70,12 +70,12 @@ build_start=$(date +"%s")
 build_date="$(TZ=Asia/Jakarta date +'%H%M-%d%m%y')"
 make ARCH=arm64 O=out $config_device &>/dev/null
 build_kernel 2>&1| tee "Log-$(TZ=Asia/Jakarta date +'%d%m%y').log"
-mv Log-*.log $temp
+mv Log-*.log "$temp"
 
 if [[ ! -f "$kernel_img" ]] ; then
     build_end=$(date +"%s")
     build_diff=$(($build_end - $build_start))
-    curl -F document=@$(echo $temp/Log-*.log) "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendDocument" -F chat_id="$TELEGRAM_ID"
+    curl -F document=@$(echo "$temp"/Log-*.log) "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendDocument" -F chat_id="$TELEGRAM_ID"
     tg_send_message "<b>build throw an errors!</b> ($(git rev-parse --abbrev-ref HEAD), Build took $(($build_diff / 60)) minutes, $(($build_diff % 60)) seconds."
     exit 1 ;
 fi
@@ -83,13 +83,13 @@ fi
 TEMPZIPNAME=$product_name-RIVA-"$build_date"-unsigned.zip
 ZIPNAME=$product_name-RIVA-"$build_date".zip
 kernel_version="$(cat $(pwd)/out/.config | grep Linux/arm64 | cut -d " " -f3)"
-curl -F document=@$(echo $temp/Log-*.log) "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendDocument" -F chat_id="$TELEGRAM_ID"
+curl -F document=@$(echo "$temp"/Log-*.log) "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendDocument" -F chat_id="$TELEGRAM_ID"
 mv "$kernel_img" "$pack/zImage"
-cd $pack
-zip -r9 $TEMPZIPNAME * -x .git README.md LICENCE $(echo *.zip) &>/dev/null
+cd "$pack" || exit
+zip -r9 "$TEMPZIPNAME" * -x .git README.md LICENCE $(echo *.zip) &>/dev/null
 curl -sLo zipsigner-3.0.jar https://raw.githubusercontent.com/baalajimaestro/AnyKernel2/master/zipsigner-3.0.jar
 java -jar zipsigner-3.0.jar "${TEMPZIPNAME}" "${ZIPNAME}"
-rm $TEMPZIPNAME
+rm "$TEMPZIPNAME"
 cd ..
 curl -F chat_id="$TELEGRAM_ID" -F "disable_web_page_preview=true" -F "parse_mode=html" -F document=@"$(echo "$pack"/*RIVA*.zip)" "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendDocument" -F caption="New #riva build is available!
 ($kernel_version, $(git rev-parse --abbrev-ref HEAD | cut -b 9-15)) at commit $(git log --pretty=format:"%h (\"%s\")" -1) | <b>SHA1:</b> $(sha1sum "$(echo "$pack"/*.zip)" | awk '{ print $1 }')."

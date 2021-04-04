@@ -40,28 +40,28 @@ masak() {
 }
 
 tg_doc() {
-    curl -F name=document -F document=@$1 -H "Content-Type:multipart/form-data" "https://api.telegram.org/bot$BOT_TOKEN/sendDocument?chat_id=1095222353"
+    curl -F name=document -F document=@"$1" -H "Content-Type:multipart/form-data" "https://api.telegram.org/bot$BOT_TOKEN/sendDocument?chat_id=1095222353"
 }
 
-cd scripts
+cd scripts || exit
 before
 cd ..
 mkdir OrangeFox
-cd OrangeFox
+cd OrangeFox || exit
 wkt
-if sink | tee sink-${DATELOG}.txt;then
+if sink | tee sink-"${DATELOG}".txt;then
     batang
     makan
-    if masak | tee masak-${DATELOG}.txt;then
+    if masak | tee masak-"${DATELOG}".txt;then
 #        FILEPATH=${OUT}/${FILE}
         tg_doc out/target/product/riva/OrangeFox*riva.zip
-        tg_doc masak-${DATELOG}.txt
+        tg_doc masak-"${DATELOG}".txt
         echo done
     else
-        grep -iE 'crash|error|failed|fatal|fail' masak-${DATELOG}.txt > masaktrim-${DATELOG}.txt
-        tg_doc masak-${DATELOG}.txt
-        tg_doc masaktrim-${DATELOG}.txt
+        grep -iE 'crash|error|failed|fatal|fail' masak-"${DATELOG}".txt > masaktrim-"${DATELOG}".txt
+        tg_doc masak-"${DATELOG}".txt
+        tg_doc masaktrim-"${DATELOG}".txt
     fi
 else
-    tg_doc sink-${DATELOG}.txt
+    tg_doc sink-"${DATELOG}".txt
 fi
