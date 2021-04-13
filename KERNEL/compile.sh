@@ -145,7 +145,7 @@ function param() {
         exit 1
     fi
 
-    KERNELNAME="SiLonT-Ginkgo-${CODENAME}-$(date +%y%m%d)"
+    KERNELNAME="SiLonT-Ginkgo-${CODENAME}-$(date +%H%M-%y%m%d)"
     TEMPZIPNAME="${KERNELNAME}-unsigned.zip"
     ZIPNAME="${KERNELNAME}.zip"
     KERNELSYNC=${KERNEL}-${CODENAME}
@@ -183,11 +183,11 @@ clonecompiler() {
     # clone clang if not exist
     if [[ "$COMPILER" == "clang" ]]; then
         git clone --depth=1 ${COMP_URL} "${CLANG_DIR}"
-        COMPILER_STRING="$("$CLANG_DIR"/bin/clang --version | head -n 1 | perl -pe 's/\((?:http|git).*?\)//gs')"
+        KBUILD_COMPILER_STRING="$("$CLANG_DIR"/bin/clang --version | head -n 1 | perl -pe 's/\((?:http|git).*?\)//gs')"
     elif [[ "$COMPILER" == "gcc" ]]; then
         git clone --depth=1 ${COMP_URL} -b ${COMP_BRANCH} "${GCC_DIR}"
         git clone --depth=1 ${COMP32_URL} -b ${COMP32_BRANCH} "${GCC32_DIR}"
-        COMPILER_STRING="$("$GCC_DIR"/bin/${CC}gcc --version | head -n 1 | perl -pe 's/\((?:http|git).*?\)//gs')"
+        KBUILD_COMPILER_STRING="$("$GCC_DIR"/bin/${CC}gcc -v 2>&1 | grep ' version ' | sed 's/[[:space:]]*$//')"
     fi
 }
 
@@ -259,13 +259,13 @@ packingkernel() {
     # Ship it to the CI channel
     END=$(date +"%s")
     DIFF=$(( END - START ))
-    tg_log "$ZIPNAME" "Ginkgo with ${COMPILER_STRING} <b>succeed</b> took $((DIFF / 60))m, $((DIFF % 60))s! @fakhiralkda"
+    tg_log "$ZIPNAME" "Ginkgo with ${KBUILD_COMPILER_STRING} <b>succeed</b> took $((DIFF / 60))m, $((DIFF % 60))s! @fakhiralkda"
 }
 
 clonecompiler
-# Starting
+export KBUILD_COMPILER_STRING
 tg_cast "<b>STARTING KERNEL BUILD ${PLATFORM} #${BUILD_NUMBER}</b>" \
-	"Compiler: <code>${COMPILER_STRING}</code>" \
+	"Compiler: <code>${KBUILD_COMPILER_STRING}</code>" \
 	"Name: <code>${KERNELNAME}</code>" \
 	"Version: <code>$(make kernelversion)</code>" \
 	"Branch: ${WORK_BRANCH}" \
