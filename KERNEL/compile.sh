@@ -58,12 +58,11 @@ function param() {
         shift
     done
 
-
     if [[ -n "$CI" ]]; then
         if [[ -n "$DRONE" ]]; then
             BUILD_NUMBER="$DRONE_BUILD_NUMBER"
             PLATFORM="Drone CI"
-            WORK_BRANCH="$DRONE_REPO_BRANCH"
+            WORK_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
             CI_URL=https://cloud.drone.io/"$DRONE_REPO"/"$DRONE_BUILD_NUMBER"
         elif [[ -n "$CIRCLECI" ]]; then
             BUILD_NUMBER="$CIRCLE_BUILD_NUM"
@@ -288,5 +287,8 @@ if ! [ -f "${IMG}" ]; then
 	echo -e "Kernel compilation failed, See buildlog to fix errors"
 	tg_log "mklog.txt" "Ginkgo ${WORK_BRANCH} <b>failed</b> in $((DIFF / 60))m, $((DIFF % 60))s! @fakhiralkda"
 	exit 1
+fi
+if [[ -z "$CI_URL" ]]; then
+    tg_log "mklog.txt"
 fi
 packingkernel
