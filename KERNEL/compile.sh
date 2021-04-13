@@ -148,7 +148,7 @@ function param() {
     KERNELNAME="SiLonT-Ginkgo-${CODENAME}-$(date +%H%M-%y%m%d)"
     TEMPZIPNAME="${KERNELNAME}-unsigned.zip"
     ZIPNAME="${KERNELNAME}.zip"
-    KERNELSYNC=${KERNEL}-${CODENAME}
+    KERNELSYNC=SiLont-${CODENAME}
 
     # Sync name
     sed -i "50s/.*/CONFIG_LOCALVERSION=\"-${KERNELSYNC}\"/g" arch/arm64/configs/"${DEFCONFIG}"
