@@ -208,17 +208,17 @@ makekernel() {
     if [[ "${REGEN}" == "true" ]]; then
         regenerate
     fi
-    if [[ "${COMP_TYPE}" == "clang" ]]; then
+    if [[ "${COMPILER}" == "clang" ]]; then
         make -j"$(nproc --all)" O=out ARCH=arm64 \
                 LD=ld.lld CC=clang \
                 AS=llvm-as AR=llvm-ar NM=llvm-nm \
                 OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump \
                 STRIP=llvm-strip \
-        		CROSS_COMPILE="aarch64-linux-gnu-" \
-		        CROSS_COMPILE_ARM32="arm-linux-gnueabi-" \
+        	CROSS_COMPILE="aarch64-linux-gnu-" \
+		CROSS_COMPILE_ARM32="arm-linux-gnueabi-" \
                 Image.gz-dtb dtbo.img
-    else
-	    make -j"$(nproc --all)" O=out ARCH=arm64 \
+    elif [[ "${COMPILER}" == "gcc" ]]; then
+        make -j"$(nproc --all)" O=out ARCH=arm64 \
                 CROSS_COMPILE="${GCC_DIR}/bin/${CC}" \
                 CROSS_COMPILE_ARM32="${GCC32_DIR}/bin/${CC32}" \
                 Image.gz-dtb dtbo.img
