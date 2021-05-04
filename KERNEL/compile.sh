@@ -262,6 +262,13 @@ packingkernel() {
     tg_log "$ZIPNAME" "Ginkgo with ${KBUILD_COMPILER_STRING} <b>succeed</b> took $((DIFF / 60))m, $((DIFF % 60))s! @fakhiralkda"
 }
 
+bersih() {
+    rm -rf mklog.txt out
+    if [[ -n "$CI" ]]; then
+        rm -rf .git
+    fi
+}
+
 clonecompiler
 export KBUILD_COMPILER_STRING
 tg_cast "<b>STARTING KERNEL BUILD ${PLATFORM} #${BUILD_NUMBER}</b>" \
@@ -271,6 +278,7 @@ tg_cast "<b>STARTING KERNEL BUILD ${PLATFORM} #${BUILD_NUMBER}</b>" \
 	"Branch: ${WORK_BRANCH}" \
 	"Commit: <code>$(git log --pretty=format:"%s" -1)</code>" \
         "${CI_URL}"
+bersih
 START=$(date +"%s")
 if [ "${KRAMEL}" == "qs" ]; then
 cat <<'EOF' >> arch/arm64/configs/vendor/ginkgo-perf_defconfig
