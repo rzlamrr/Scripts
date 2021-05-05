@@ -19,7 +19,7 @@ makan () {
     lunch komodo_riva-userdebug
 }
 
-masak() {
+memasak() {
     masak komodo -j$(nproc --all)
 }
 
@@ -40,8 +40,8 @@ if sink | tee sink-"${DATELOG}".txt;then
 #    python3 cloner.py
     cd ..
     du -sh komodo
-    exit 
-    if masak | tee masak-"${DATELOG}".txt;then
+    exit
+    if memasak | tee masak-"${DATELOG}".txt;then
         FILEPATH=${OUT}/${FILE}
         sshpass -p "$SF_PASS" sftp -oBatchMode=no rzlamrr@frs.sourceforge.net:/home/frs/project/dvstLab/ > /dev/null 2>&1 <<EOF
 cd komodo

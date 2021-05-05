@@ -195,7 +195,7 @@ clonecompiler() {
 regenerate() {
     cp out/.config arch/arm64/configs/"${DEFCONFIG}"
     git config user.name rzlamrr
-    git config user.email rizal82rebel@gmail.com
+    git config user.email rzlamrr.dvst@protonmail.com
     git add arch/arm64/configs/"${DEFCONFIG}"
     git commit -m "defconfig: Regenerate"
     git push
