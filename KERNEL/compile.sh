@@ -161,7 +161,7 @@ CHATID="$CHATID" # Group/channel chatid (use rose/userbot to get it)
 TELEGRAM_TOKEN="$TOKED" # Get from botfather
 TELEGRAM_FOLDER="${HOME}"/telegram
 if [[ ! -d "${TELEGRAM_FOLDER}" ]]; then
-    wget https://github.com/fabianonline/telegram.sh/raw/master/telegram -P "${TELEGRAM_FOLDER}" &> /dev/null
+    wget -q https://github.com/fabianonline/telegram.sh/raw/master/telegram -P "${TELEGRAM_FOLDER}" &> /dev/null
     chmod +x "${TELEGRAM_FOLDER}"/telegram
 fi
 TELEGRAM="${TELEGRAM_FOLDER}"/telegram
@@ -253,7 +253,7 @@ packingkernel() {
     zip -r9 "${TEMPZIPNAME}" ./*
 
     # Sign the zip before sending it to Telegram
-    curl -sLo zipsigner-3.0.jar https://raw.githubusercontent.com/baalajimaestro/AnyKernel2/master/zipsigner-3.0.jar
+    wget -q https://github.com/dvstLab/docker-builder/raw/main/zipsigner-3.0.jar
     java -jar zipsigner-3.0.jar "${TEMPZIPNAME}" "${ZIPNAME}"
 
     # Ship it to the CI channel
