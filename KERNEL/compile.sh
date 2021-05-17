@@ -253,8 +253,8 @@ packingkernel() {
     zip -r9 "${TEMPZIPNAME}" ./*
 
     # Sign the zip before sending it to Telegram
-    wget -q https://github.com/dvstLab/docker-builder/raw/main/zipsigner-3.0.jar
-    java -jar zipsigner-3.0.jar "${TEMPZIPNAME}" "${ZIPNAME}"
+    wget -q https://github.com/dvstLab/docker-builder/raw/main/zipsigner-4.0.jar
+    java -jar zipsigner-4.0.jar "${TEMPZIPNAME}" "${ZIPNAME}"
 
     # Ship it to the CI channel
     END=$(date +"%s")
